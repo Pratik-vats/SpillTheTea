@@ -1,0 +1,29 @@
+# Render deployment configuration for the backend
+# See: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: anon-chat-backend
+    runtime: node
+    region: oregon
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false  # set manually in Render dashboard
+      - key: CLIENT_URL
+        sync: false  # set to your Vercel frontend URL
+      - key: MAX_CONNECTIONS_PER_IP
+        value: 5
+      - key: RATE_LIMIT_MAX_MESSAGES
+        value: 5
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 10000
+      - key: MAX_MESSAGE_LENGTH
+        value: 500
+      - key: MAX_STORED_MESSAGES
+        value: 1000
