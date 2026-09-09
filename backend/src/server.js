@@ -23,8 +23,10 @@ async function main() {
   // so that early arrivals don't silently fall through to the in-memory store.
   try {
     await connectDatabase(MONGODB_URI);
+    console.log(`[server] MongoDB readyState after connect: ${mongoose.connection.readyState} (1 = connected)`);
   } catch (err) {
     console.error('[server] Could not connect to MongoDB, starting in degraded (in-memory) mode:', err.message);
+    console.error(`[server] MongoDB readyState: ${mongoose.connection.readyState}`);
   }
 
   // Application-level keep-alive: ping MongoDB every 4 minutes to prevent

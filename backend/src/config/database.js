@@ -47,7 +47,9 @@ async function connectDatabase(uri) {
     connectTimeoutMS: 10_000,           // 10s to establish TCP connection
 
     // --- TLS / SSL ---
-    tls: true,                          // force TLS (Atlas requires it)
+    // NOTE: Do NOT set `tls: true` here — the `mongodb+srv://` URI scheme
+    // enables TLS automatically. Forcing it explicitly can cause handshake
+    // conflicts and silent connection failures on some driver versions.
 
     // --- Keep-alive & heartbeat ---
     heartbeatFrequencyMS: 10_000,       // ping every 10s (prevents idle disconnect)
@@ -62,7 +64,12 @@ async function connectDatabase(uri) {
     bufferCommands: true,               // queue operations during brief disconnects
     // (Mongoose reconnects automatically via the driver; bufferCommands lets
     //  operations that fire during the reconnect window succeed once it's back.)
+
+    // --- Monitoring ---
+    appName: 'anon-chat',               // shows up in Atlas monitoring / logs
   });
+
+  console.log(`[db] Initial connection readyState: ${mongoose.connection.readyState}`);
 }
 
 /**
@@ -73,11 +80,6 @@ async function connectDatabase(uri) {
  */
 function scheduleReconnect(uri) {
   if (reconnectTimer) return; // already scheduled
-
-  // Don't reconnect if connection is intentionally closed
-  if (mongoose.connection.readyState === 3 /* disconnected intentionally */) {
-    return;
-  }
 
   const delay = Math.min(
     1000 * Math.pow(2, reconnectAttempts), // 1s, 2s, 4s, 8s, 16s, 30s...
@@ -95,12 +97,12 @@ function scheduleReconnect(uri) {
         serverSelectionTimeoutMS: 10_000,
         socketTimeoutMS: 45_000,
         connectTimeoutMS: 10_000,
-        tls: true,
         heartbeatFrequencyMS: 10_000,
         maxIdleTimeMS: 60_000,
         maxPoolSize: 10,
         minPoolSize: 2,
         bufferCommands: true,
+        appName: 'anon-chat',
       });
     } catch (err) {
       console.error(`[db] Reconnection attempt #${reconnectAttempts} failed:`, err.message);

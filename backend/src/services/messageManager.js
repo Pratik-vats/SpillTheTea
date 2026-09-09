@@ -49,11 +49,14 @@ class MessageManager {
       try {
         const created = await Message.create(doc);
         await this._trimOldest();
+        console.log('[messageManager] Message saved to MongoDB');
         return this._toClientShape(created);
       } catch (err) {
         console.error('[messageManager] DB save failed, falling back to memory:', err.message);
         // fall through to memory store below
       }
+    } else {
+      console.warn(`[messageManager] DB not available (readyState=${require('mongoose').connection.readyState}), saving to memory`);
     }
 
     this.memoryStore.push(doc);
@@ -94,16 +97,18 @@ class MessageManager {
    * bulk delete — 2 queries instead of the previous 3.
    */
   async _trimOldest() {
-    // Find the _id of the Nth-newest document (the retention boundary).
+    // Find the createdAt of the Nth-newest document (the retention boundary).
     // Everything older than this should be deleted.
-    const boundary = await Message.findOne({}, { _id: 1 })
+    const boundary = await Message.findOne({}, { createdAt: 1 })
       .sort({ createdAt: -1 })
       .skip(this.maxStoredMessages)
       .lean();
 
     if (!boundary) return; // still within the cap
 
-    await Message.deleteMany({ _id: { $lte: boundary._id } });
+    // Delete by createdAt (not _id) — _id ordering is unreliable after
+    // bulk insertMany flushes from the in-memory fallback store.
+    await Message.deleteMany({ createdAt: { $lte: boundary.createdAt } });
   }
 
   /** Returns up to `limit` most recent messages, oldest first (chat order). */
@@ -114,10 +119,13 @@ class MessageManager {
           .sort({ createdAt: -1 })
           .limit(limit)
           .lean();
+        console.log(`[messageManager] Loaded ${docs.length} messages from MongoDB`);
         return docs.reverse().map((doc) => this._toClientShape(doc));
       } catch (err) {
         console.error('[messageManager] DB read failed, using memory store:', err.message);
       }
+    } else {
+      console.warn(`[messageManager] DB not available for history (readyState=${require('mongoose').connection.readyState}), returning ${this.memoryStore.length} in-memory messages`);
     }
     return this.memoryStore.slice(-limit).map((doc) => this._toClientShape(doc));
   }
