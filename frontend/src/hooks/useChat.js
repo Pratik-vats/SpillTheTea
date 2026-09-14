@@ -45,6 +45,7 @@ export function useChat() {
 
   useEffect(() => {
     if (!socket.connected) {
+      socket.io.opts.query = { room: getRoomFromUrl() };
       socket.connect();
     }
 
