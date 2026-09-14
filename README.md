@@ -1,23 +1,55 @@
-# ☕ SpillTheTea — Anonymous Real-Time Chat
+<div align="center">
+  <h1>☕ SpillTheTea</h1>
+  <p><strong>Anonymous Real-Time Chat Rooms. No names. No accounts. Just spill.</strong></p>
+  <p>
+    <img src="https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react" alt="React" />
+    <img src="https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js" alt="Node" />
+    <img src="https://img.shields.io/badge/Socket.IO-Realtime-010101?style=flat-square&logo=socket.io" alt="Socket.IO" />
+    <img src="https://img.shields.io/badge/MongoDB-Mongoose-47A248?style=flat-square&logo=mongodb" alt="MongoDB" />
+    <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="License" />
+  </p>
+</div>
 
-A fully anonymous, real-time chat application where users can say anything without creating an account. No sign-ups, no emails, no passwords — just connect and start spilling.
+---
 
-> **Live:** [spill-the-tea-green.vercel.app](https://spill-the-tea-green.vercel.app)
+A fully anonymous, real-time chat application where users can converse without creating an account. Built with a modern, glassmorphic **Dark Ceramic** theme, it offers a seamless, secure, and highly aesthetically pleasing chat experience.
+
+> **Live Demo:** [spill-the-tea-green.vercel.app](https://spill-the-tea-green.vercel.app)
+
+---
+
+## 📑 Table of Contents
+- [✨ Features](#-features)
+- [🎨 UI & Design](#-ui--design)
+- [🛠 Tech Stack](#-tech-stack)
+- [📁 Project Structure](#-project-structure)
+- [🚀 Getting Started](#-getting-started)
+- [⚙️ Environment Variables](#️-environment-variables)
+- [🌐 Deployment](#-deployment)
+- [🏗 Architecture & Security](#-architecture--security)
+- [📄 License](#-license)
 
 ---
 
 ## ✨ Features
 
-- **100% Anonymous** — No accounts, no tracking. Every user gets a random numeric ID and a fun tea-themed nickname
-- **Real-Time Messaging** — Powered by WebSockets (Socket.IO) for instant message delivery
-- **Live Online Counter** — See how many people are in the room
-- **Join/Leave Notifications** — Know when someone enters or leaves
-- **Chat History** — Last 1,000 messages are persisted and loaded on connect
-- **Anti-Spam Protection** — Rate limiting (5 messages per 10 seconds) prevents flooding
-- **Connection Cap** — Max 5 connections per IP to prevent resource abuse
-- **Auto-Reconnect** — Seamlessly reconnects if the connection drops
-- **Graceful Degradation** — Falls back to in-memory storage if the database is temporarily unreachable
-- **Mobile Responsive** — Clean, modern UI that works on all screen sizes
+- **100% Anonymous:** No sign-ups, emails, or tracking. Users are assigned a random numeric ID and a fun, tea-themed nickname.
+- **Multiple Rooms:** Chat in the permanent "Global Lounge" or create your own public/private rooms. Share invite links effortlessly.
+- **Real-Time Messaging:** Powered by WebSockets (`Socket.IO`) for instant, ultra-low latency message delivery.
+- **Live Online Counter:** See exactly how many users are actively "brewing" in your current room.
+- **Chat History:** The last 1,000 messages are safely persisted and instantly loaded upon connection.
+- **Anti-Spam & Security:** Strict rate limiting (5 messages per 10 seconds), max 5 connections per IP, and payload caps.
+- **Resilient Infrastructure:** Auto-reconnect with exponential backoff and graceful fallback to in-memory storage if the database ever goes offline.
+
+---
+
+## 🎨 UI & Design
+
+The application features a bespoke **Dark Ceramic** theme designed to feel premium and immersive:
+- **Glassmorphism:** Frosted glass effects (`backdrop-filter`) on the message composer and sidebars.
+- **Dynamic Backgrounds:** A subtle, seamless tea-themed SVG pattern that elegantly contrasts with glowing accents.
+- **Custom Typography:** Uses *Caveat* for signature handwritten branding and *Inter* for perfectly legible chat text.
+- **Responsive Layout:** A collapsible sidebar and fluid message containers ensure a flawless experience on both desktop and mobile.
 
 ---
 
@@ -28,30 +60,31 @@ A fully anonymous, real-time chat application where users can say anything witho
 | **Frontend** | React 18, Vite 5, Vanilla CSS |
 | **Backend** | Node.js, Express 4, Socket.IO 4 |
 | **Database** | MongoDB (Mongoose 8) |
-| **Security** | Helmet, CORS, rate limiting, input validation |
-| **Hosting** | Vercel (frontend) + Render (backend) |
+| **Security** | Helmet, CORS, custom rate limiting, input validation |
+| **Hosting** | Vercel (Frontend) & Render (Backend) |
 
 ---
 
 ## 📁 Project Structure
 
-```
+```text
 anon-chat/
 ├── frontend/                    # React SPA (Vite)
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── ChatWindow.jsx   # Main chat container
+│   │   │   ├── ChatWindow.jsx   # Main chat container & header
 │   │   │   ├── Message.jsx      # Individual message bubble
-│   │   │   ├── MessageInput.jsx # Text input with send button
+│   │   │   ├── MessageInput.jsx # Text input with glassmorphism
 │   │   │   ├── OnlineCounter.jsx# Live user count display
+│   │   │   ├── Sidebar.jsx      # Room navigation
 │   │   │   └── SystemMessage.jsx# Join/leave notifications
 │   │   ├── hooks/
-│   │   │   └── useChat.js       # All socket logic & state management
+│   │   │   └── useChat.js       # Socket logic & state management
 │   │   ├── services/
 │   │   │   └── socket.js        # Socket.IO client instance
-│   │   ├── App.jsx              # Root component
+│   │   ├── App.jsx              # Root layout component
 │   │   ├── main.jsx             # Entry point
-│   │   └── global.css           # All styles (glassmorphism theme)
+│   │   └── global.css           # Design system & theme styles
 │   └── package.json
 │
 ├── backend/                     # Node.js API + WebSocket server
@@ -84,7 +117,7 @@ anon-chat/
 ### Prerequisites
 
 - **Node.js** ≥ 18
-- **MongoDB** — local instance or [MongoDB Atlas](https://www.mongodb.com/atlas) (free tier works)
+- **MongoDB** — local instance or [MongoDB Atlas](https://www.mongodb.com/atlas) (free tier supported)
 
 ### 1. Clone the repository
 
@@ -112,22 +145,22 @@ CLIENT_URL=http://localhost:5173
 Start the backend:
 
 ```bash
-npm run dev    # with hot-reload (nodemon)
+npm run dev    # Development with hot-reload (nodemon)
 # or
-npm start      # production mode
+npm start      # Production mode
 ```
 
 ### 3. Set up the frontend
 
 ```bash
-cd frontend
+cd ../frontend
 npm install
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) — you should see the chat room with a green "Connected" indicator.
+Open [http://localhost:5173](http://localhost:5173) in your browser. You should see the chat room with a green "Connected" indicator.
 
-> **Tip:** Open two browser tabs to test real-time messaging between anonymous users.
+> **Pro Tip:** Open two browser tabs to test real-time messaging between anonymous users instantly.
 
 ---
 
@@ -158,42 +191,42 @@ Open [http://localhost:5173](http://localhost:5173) — you should see the chat 
 
 ### Backend → [Render](https://render.com)
 
-1. Push your code to GitHub
-2. Create a new **Web Service** on Render
-3. Set **Root Directory** to `backend`
-4. Set **Build Command** to `npm install`
-5. Set **Start Command** to `npm start`
-6. Add environment variables:
+1. Push your code to GitHub.
+2. Create a new **Web Service** on Render.
+3. Set **Root Directory** to `backend`.
+4. Set **Build Command** to `npm install` and **Start Command** to `npm start`.
+5. Add the following environment variables:
    - `NODE_ENV` = `production`
    - `MONGODB_URI` = your Atlas connection string
    - `CLIENT_URL` = your Vercel frontend URL
-   - Other rate-limiting vars as needed
+   - *Any other rate-limiting variables as needed.*
 
-> Alternatively, use the included `render.yaml` blueprint for one-click setup.
+> Alternatively, use the included `render.yaml` blueprint for a one-click setup.
 
 ### Frontend → [Vercel](https://vercel.com)
 
-1. Import your GitHub repo on Vercel
-2. Set **Root Directory** to `frontend`
-3. Framework preset will auto-detect as **Vite**
-4. Add environment variable:
+1. Import your GitHub repo on Vercel.
+2. Set **Root Directory** to `frontend`.
+3. The framework preset will automatically be detected as **Vite**.
+4. Add the environment variable:
    - `VITE_SERVER_URL` = your Render backend URL
-5. Deploy
+5. Deploy.
 
 ### Post-Deploy Checklist
 
-- [ ] Set `CLIENT_URL` on Render to your Vercel URL (no trailing slash)
-- [ ] Set `VITE_SERVER_URL` on Vercel to your Render URL
-- [ ] Whitelist `0.0.0.0/0` on MongoDB Atlas Network Access (Render IPs are dynamic)
-- [ ] Verify the `/health` endpoint returns `{"status":"ok"}`
+- [ ] Set `CLIENT_URL` on Render to your Vercel URL (no trailing slash).
+- [ ] Set `VITE_SERVER_URL` on Vercel to your Render URL.
+- [ ] Whitelist `0.0.0.0/0` on MongoDB Atlas Network Access (Render IPs are dynamic).
+- [ ] Verify the `/health` endpoint returns `{"status":"ok"}`.
 
 ---
 
-## 🏗 Architecture
+## 🏗 Architecture & Security
 
-```
+### System Flow
+```text
 ┌─────────────────┐         WebSocket          ┌──────────────────┐
-│                 │  ◄──────────────────────►   │                  │
+│                 │  ◄──────────────────────►  │                  │
 │   React SPA     │      (Socket.IO)           │   Node.js API    │
 │   (Vercel CDN)  │                            │   (Render)       │
 │                 │                            │                  │
@@ -207,26 +240,24 @@ Open [http://localhost:5173](http://localhost:5173) — you should see the chat 
                                                └──────────────────┘
 ```
 
-**Key design decisions:**
+### Key Design Decisions
 
-- **Separation of concerns** — Socket logic, rate limiting, user management, and message persistence are each in their own service module
-- **Graceful degradation** — If MongoDB is unreachable, the chat continues using an in-memory buffer. When the DB reconnects, buffered messages are automatically flushed to MongoDB
-- **Auto-reconnect** — Exponential backoff reconnection (1s → 2s → 4s → ... → 30s cap) with keep-alive pings every 4 minutes
-- **No persistent identity** — Deliberately stores the bare minimum: a numeric user ID, nickname, message text, and timestamp. No IPs, no cookies, no fingerprints
+- **Separation of Concerns:** Socket logic, rate limiting, user management, and message persistence are decoupled into modular services.
+- **Graceful Degradation:** If MongoDB is unreachable, the chat continues using an in-memory buffer. When the DB reconnects, buffered messages are safely flushed to MongoDB.
+- **Auto-Reconnect:** Exponential backoff reconnection (1s → 2s → 4s → ... → 30s cap) with keep-alive pings every 4 minutes guarantees stability.
+- **No Persistent Identity:** Deliberately stores the bare minimum: a numeric user ID, nickname, message text, and timestamp. No IPs, cookies, or fingerprints are logged.
 
----
-
-## 🛡 Security
+### Security Implementations
 
 | Protection | Implementation |
 |:-----------|:---------------|
-| **Helmet** | Sets security headers (HSTS, X-Content-Type-Options, etc.) |
-| **CORS** | Locked to the configured `CLIENT_URL` origin(s) |
-| **Rate Limiting** | Sliding window per socket — 5 msgs / 10s |
-| **Connection Cap** | Max 5 connections per IP address |
-| **Input Validation** | Messages trimmed, length-checked, control characters stripped |
-| **Payload Size** | Socket.IO `maxHttpBufferSize` capped at 20KB |
-| **XSS Prevention** | Messages rendered as plain text via React (no `dangerouslySetInnerHTML`) |
+| **Helmet** | Enforces strict security headers (HSTS, X-Content-Type-Options). |
+| **CORS** | Locked strictly to the configured `CLIENT_URL` origin(s). |
+| **Rate Limiting** | Sliding window per socket (default: 5 msgs / 10s). |
+| **Connection Cap** | Maximum 5 concurrent connections per IP address. |
+| **Input Validation** | Messages are trimmed, length-checked, and stripped of control characters. |
+| **Payload Limits** | Socket.IO `maxHttpBufferSize` capped at 20KB to prevent memory exhaustion. |
+| **XSS Prevention** | Messages safely rendered as plain text via React (no `dangerouslySetInnerHTML`). |
 
 ---
 

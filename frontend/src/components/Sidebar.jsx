@@ -35,18 +35,20 @@ export default function Sidebar({
                 onToggle();
               }}
             >
-              <span className="sidebar-room-icon">
-                {room.isPermanent ? '🌐' : room.isPublic !== false ? '💬' : '🔒'}
+              <span className="sidebar-room-icon" style={{ color: currentRoom === room.roomId ? 'var(--tea)' : 'var(--text-muted)' }}>
+                #
               </span>
-              <span className="sidebar-room-info">
-                <span className="sidebar-room-name">{room.name}</span>
-                <span className="sidebar-room-count">
-                  {room.activeUsers} {room.activeUsers === 1 ? 'user' : 'users'}
-                </span>
+              <span className="sidebar-room-name" style={{ flex: 1, color: currentRoom === room.roomId ? 'var(--text)' : 'inherit' }}>{room.name}</span>
+              <span className="sidebar-room-status" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                {currentRoom === room.roomId ? (
+                  <>
+                    <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: 'var(--online)' }} />
+                    <span>live</span>
+                  </>
+                ) : (
+                  <span>{room.activeUsers} brew</span>
+                )}
               </span>
-              {currentRoom === room.roomId && (
-                <span className="sidebar-room-active-dot" />
-              )}
             </button>
           ))}
 

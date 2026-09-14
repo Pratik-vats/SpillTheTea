@@ -312,8 +312,10 @@ body {
   min-width: 0;
   height: 100%;
   background:
+    url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23F2A65F' stroke-width='2' fill='none' opacity='0.09' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate(30, 30)'%3E%3Cpath d='M0,10 L30,10 C30,25 20,30 15,30 C10,30 0,25 0,10 Z'/%3E%3Cpath d='M30,15 C36,15 38,18 38,22 C38,26 34,28 30,28'/%3E%3Cpath d='M8,-2 C10,-7 12,0 12,-5 M18,-2 C20,-7 22,0 22,-5'/%3E%3C/g%3E%3Cg transform='translate(130, 40) rotate(45)'%3E%3Cpath d='M0,0 C15,-5 20,10 20,20 C5,15 0,0 0,0 Z'/%3E%3Cpath d='M0,0 L20,20'/%3E%3C/g%3E%3Cg transform='translate(40, 130)'%3E%3Cpath d='M10,0 L30,0 L35,20 C35,30 25,35 20,35 C15,35 5,30 5,20 Z'/%3E%3Cpath d='M5,15 C-5,15 -5,5 10,5'/%3E%3Cpath d='M35,10 C42,10 42,20 35,20'/%3E%3Cpath d='M15,0 L15,-5 C15,-8 25,-8 25,-5 L25,0'/%3E%3C/g%3E%3Cg transform='translate(150, 150) rotate(-30)'%3E%3Cellipse cx='10' cy='15' rx='8' ry='12'/%3E%3Cpath d='M5,7 C10,12 10,18 15,23'/%3E%3C/g%3E%3Cg transform='translate(90, 80) rotate(15)'%3E%3Crect x='0' y='0' width='20' height='25' rx='3'/%3E%3Cpath d='M20,5 C25,5 25,15 20,15'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
     linear-gradient(180deg, rgba(16, 14, 12, 0.92), rgba(12, 10, 9, 0.96)),
     var(--surface);
+  background-size: 150px, auto, auto;
   overflow: hidden;
   position: relative;
   animation: window-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -340,11 +342,80 @@ body {
   position: relative;
 }
 
-.chat-header-brand {
+.chat-header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+  flex: 1;
+}
+
+.chat-header-brand-group {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.brand-titles {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.brand-main {
+  font-family: 'Caveat', cursive;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 0.9;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+
+.brand-main-tea {
+  color: var(--tea);
+}
+
+.brand-sub {
+  font-family: 'Caveat', cursive;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  line-height: 1.1;
+  margin-top: 2px;
+}
+
+.header-divider {
+  width: 1px;
+  height: 38px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
+.chat-header-room-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   min-width: 0;
+}
+
+.chat-header-room-info h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.2;
+}
+
+.chat-header-room-info .online-counter {
+  background: transparent;
+  border: none;
+  padding: 0;
+  justify-content: flex-start;
+  margin-top: 2px;
 }
 
 /* ---------- Hamburger button in header ---------- */
@@ -802,10 +873,12 @@ body {
 /* ---------- Input area ---------- */
 
 .message-input {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
   padding: 16px 20px;
   flex-shrink: 0;
-  background: rgba(22, 19, 15, 0.92);
+  background: rgba(16, 14, 12, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .message-input-row {
@@ -1174,12 +1247,12 @@ body {
 
   .sidebar {
     top: 0;
-    left: 58px;
+    left: 0;
     bottom: 0;
     z-index: 60;
-    width: min(300px, calc(100vw - 58px));
+    width: min(300px, 85vw);
     border-radius: 0;
-    transform: translateX(calc(-100% - 58px));
+    transform: translateX(-100%);
   }
 
   .sidebar-open {
@@ -1187,7 +1260,7 @@ body {
   }
 
   .sidebar-backdrop {
-    inset: 0 0 0 58px;
+    inset: 0;
     z-index: 55;
     background: rgba(0, 0, 0, 0.45);
   }
@@ -1205,15 +1278,19 @@ body {
     padding: 12px 14px;
     gap: 8px;
   }
-  .chat-header-brand {
-    width: 100%;
+  .chat-header-brand-group,
+  .header-divider {
+    display: none;
   }
-  .chat-header-room h1 {
-    font-size: 15px;
+  .chat-header-left {
+    gap: 8px;
+  }
+  .chat-header-room-info h1 {
+    font-size: 13.5px;
   }
   .chat-header-meta {
     gap: 6px;
-    justify-content: flex-start;
+    justify-content: flex-end;
   }
   .online-counter {
     font-size: 10.5px;
@@ -1243,6 +1320,9 @@ body {
   .share-link-btn {
     font-size: 10.5px;
     padding: 4px 10px;
+  }
+  .input-footer {
+    display: none;
   }
 }
 

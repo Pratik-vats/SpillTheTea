@@ -70,7 +70,7 @@ export default function ChatWindow({
   return (
     <div className="chat-window">
       <header className="chat-header">
-        <div className="chat-header-brand">
+        <div className="chat-header-left">
           <button
             className="header-hamburger"
             onClick={onToggleSidebar}
@@ -81,26 +81,36 @@ export default function ChatWindow({
             <span />
             <span />
           </button>
-          <span className="brand-avatar" aria-hidden="true" />
-          <div className="chat-header-room">
+          
+          <div className="chat-header-brand-group">
+            <div className="brand-titles">
+              <span className="brand-main">
+                Spill<span className="brand-main-tea">TheTea</span>
+              </span>
+            </div>
+          </div>
+          
+          <div className="header-divider" />
+          
+          <div className="chat-header-room-info">
             <h1>
               {roomName}
-              {!isPermanent && (
+              {currentRoomInfo && !isPermanent && (
                 <span className="room-privacy-badge">
                   {isPublic ? '🌐' : '🔒'}
                 </span>
               )}
             </h1>
+            <OnlineCounter count={roomOnlineCount} status={connectionStatus} />
           </div>
         </div>
 
         <div className="chat-header-meta">
-          {!isPermanent && (
+          {currentRoomInfo && !isPermanent && (
             <button className="share-link-btn" onClick={onCopyInviteLink} title="Copy invite link">
               🔗 Share
             </button>
           )}
-          <OnlineCounter count={roomOnlineCount} status={connectionStatus} />
           {selfId != null && (
             <span className="self-id-badge">
               <span className="self-id-label">YOU:</span>{' '}
